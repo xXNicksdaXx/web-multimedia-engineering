@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+a {
+    text-decoration: none;
+}
+
+.navbar {
+    width: 100%;
+    background-image: linear-gradient(#cccccc, #eeeeee);
+    border-bottom: 1px solid #bbbbbb;
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.navbar li {
+    float: left;
+    border-right: 1px solid #bbbbbb;
+}
+
+.nb-icon {
+    float: left;
+    height: 24px;
+    padding-right: 4px;
+    filter:
+}
+
+.nb-icon:hover {
+    filter: brightness(100%);
+}
+
+.navbar a {
+    align-content: center;
+    height: 64px;
+    display: flex;
+    padding: 20px 8px;
+    color: #393939;
+
+}
+
+.navbar a:hover {
+    background-image: linear-gradient(#cccccc, #bbbbbb);
+    color: #1a1a1a;
+}
+
+a.nb-logo:hover {
+    background-image: linear-gradient(#cccccc, #eeeeee);
+}
+
+.nb-logo img {
+    height: 32px;
+    padding: 0 8px;
+}
+
+.nb-logo img:hover {
+    height: 32px;
+    filter: grayscale(100%);
+}
+
+.navbar .logo:hover {
+    background-image: linear-gradient(#cccccc, #eeeeee);
+}
+
+/* small size */
+@media only screen and (max-width: 767px) {
+    li.menu {
+        float: right;
+        width: 32px;
+    }
+}
+
+/* medium size */
+@media only screen and (min-width: 768px) {
+    li.menu {
+        display: none;
+    }
+}
+
+/* large size */
+@media only screen and (min-width: 1200px) {
+    .navbar {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    li.menu {
+        display: none;
+    }
+}
