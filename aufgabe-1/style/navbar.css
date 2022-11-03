@@ -39,7 +39,7 @@ a {
     display: flex;
     padding: 20px 8px;
     color: #393939;
-
+    vertical-align: bottom;
 }
 
 .navbar a:hover {
