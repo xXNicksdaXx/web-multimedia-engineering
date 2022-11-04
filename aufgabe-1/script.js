@@ -1,3 +1,4 @@
+//--- DATA ---
 const csv =
     "id ,name                ,birth rate per 1000,cell phones per 100,children per woman,electricity consumption per capita,gdp_per_capita,gdp_per_capita_growth,inflation annual,internet user per 100,life expectancy,military expenditure percent of gdp,gps_lat      ,gps_long\n" +
     "001,Brazil              ,16.405             ,90.01936334        ,1.862             ,2201.808724                       ,4424.758692   ,-1.520402823         ,8.228535058     ,39.22                ,74             ,1.615173655                        ,-14.235004000,-51.925280000\n" +
@@ -28,7 +29,8 @@ const csv =
 const headers = ["id", "name", "birthRate", "cellPhoneRate", "childrenPerWoman", "electricity", "gdp", "gdpGrowth", "inflation", "internetUsers", "lifeExpectancy", "military", "gpsLat", "gpsLong"];
 
 
-// executed code
+
+//--- EXECUTED CODE ---
 const firstLine = csv.split("\n")[0].split(",");
 for(let i = 0; i < firstLine.length; i++) {
     firstLine[i] = firstLine[i].replaceAll("_", " ");
@@ -37,6 +39,10 @@ const items = csvToList(csv);
 let table = document.querySelector("table");
 generateTableHead(table, firstLine);
 populateTableBody(table, items);
+
+
+
+//--- FUNCTIONS ---
 
 // source: https://www.valentinog.com/blog/html-table/
 function generateTableHead(table, data) {
@@ -79,4 +85,14 @@ function csvToList(csv){
     }
 
     return result;
+}
+
+// source: https://stackoverflow.com/questions/35579569/hide-show-menu-onclick-javascript
+function toggleMenu() {
+    let dropdownMenu = document.getElementById("dropdown-content");
+    if(dropdownMenu.style.display === "block")
+        dropdownMenu.style.display = "none";
+    else {
+        dropdownMenu.style.display = "block";
+    }
 }

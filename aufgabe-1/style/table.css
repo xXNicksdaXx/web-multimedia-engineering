@@ -1,6 +1,7 @@
 table {
     width: 90%;
     border-collapse: collapse;
+    alignment: center;
 }
 
 th {

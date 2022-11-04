@@ -1,93 +1,149 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
-a {
-    text-decoration: none;
-}
-
-.navbar {
-    width: 100%;
+nav {
+    width: 100vw;
+    height: 64px;
     background-image: linear-gradient(#cccccc, #eeeeee);
     border-bottom: 1px solid #bbbbbb;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 
-.navbar ul {
+ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
 }
 
-.navbar li {
+li a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.75);
+}
+
+li a:hover {
+    text-decoration: none;
+}
+
+li {
+    align-items: center;
+}
+
+li:hover a {
+    color: black;
+}
+
+li:hover .icon {
+    filter: opacity(1);
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    filter: opacity(0.7);
+}
+
+.horizontal li {
+    display: flex;
+    height: 64px;
     float: left;
     border-right: 1px solid #bbbbbb;
 }
 
-.nb-icon {
-    float: left;
-    height: 24px;
-    padding-right: 4px;
-    filter:
+.horizontal li:first-child {
+    border-left: 1px solid #bbbbbb;
 }
 
-.nb-icon:hover {
-    filter: brightness(100%);
-}
-
-.navbar a {
-    align-content: center;
-    height: 64px;
-    display: flex;
-    padding: 20px 8px;
-    color: #393939;
-    vertical-align: bottom;
-}
-
-.navbar a:hover {
+.horizontal li:hover {
     background-image: linear-gradient(#cccccc, #bbbbbb);
-    color: #1a1a1a;
 }
 
-a.nb-logo:hover {
-    background-image: linear-gradient(#cccccc, #eeeeee);
+.horizontal li a {
+    padding: 20px 4px;
 }
 
-.nb-logo img {
+#dropdown-content li {
+    display: grid;
+    width: 100vw;
     height: 32px;
-    padding: 0 8px;
 }
 
-.nb-logo img:hover {
-    height: 32px;
+#dropdown-content li:last-child {
+    border-bottom: 1px solid #bbbbbb;
+}
+
+#dropdown-content li:hover {
+    background-color: #bbbbbb;
+}
+
+#dropdown-content li a {
+    padding: 4px 8px;
+}
+
+#logo a {
+    height: 64px;
+    padding: 8px;
+}
+
+#logo img {
+    height: 48px;
+    vertical-align: middle;
+}
+
+#logo:hover img {
     filter: grayscale(100%);
 }
 
-.navbar .logo:hover {
+li#logo:hover {
     background-image: linear-gradient(#cccccc, #eeeeee);
 }
 
+#dropdown-button {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 48px;
+    width: 48px;
+    border: none;
+    outline: none;
+    background-color: inherit;
+}
+
+#dropdown-button img {
+    height: inherit;
+    width: inherit;
+}
+
 /* small size */
-@media only screen and (max-width: 767px) {
-    li.menu {
-        float: right;
-        width: 32px;
+@media only screen and (max-width: 799px){
+    .horizontal {
+        display: none;
+    }
+
+    #dropdown-content {
+        display: none;
+    }
+
+    #dropdown-button {
+        display: block;
     }
 }
 
 /* medium size */
-@media only screen and (min-width: 768px) {
-    li.menu {
-        display: none;
+@media only screen and (min-width: 799px) {
+    #dropdown-button, #dropdown-content {
+        display: none !important;
     }
 }
 
 /* large size */
 @media only screen and (min-width: 1200px) {
-    .navbar {
+    nav {
         padding-left: 5%;
         padding-right: 5%;
     }
 
-    li.menu {
-        display: none;
+    #dropdown-button #dropdown-content {
+        display: none !important;
     }
 }

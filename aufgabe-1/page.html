@@ -15,69 +15,125 @@
 </head>
 <body>
     <header>
-        <nav class="navbar">
+        <nav>
+            <div id="logo">
+                <a href="">
+                    <img src="assets/world_data-logo.svg" alt="World Data Logo">
+                </a>
+            </div>
+            <div class="horizontal">
+                <ul>
+                    <li>
+                        <a href="">
+                            <img class="icon" src="assets/table.svg" alt="Table">
+                            <span>A1-Table</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <img class="icon" src="assets/settings.svg" alt="Parse">
+                            A2-Parse
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <img class="icon" src="assets/save.svg" alt="Save">
+                            A2-Save
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <img class="icon" src="assets/print.svg" alt="Print">
+                            A2-Print
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <img class="icon" src="assets/server.svg" alt="REST">
+                            A3-REST
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <img class="icon" src="assets/map.svg" alt="Vis">
+                            A4-Vis
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <img class="icon" src="assets/cube.svg" alt="3D">
+                            A5-3D
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <button id="dropdown-button" onclick="toggleMenu()">
+                <img src="assets/menu.svg" alt="Menu">
+            </button>
+        </nav>
+        <div id="dropdown-content">
             <ul>
                 <li>
-                    <a class="nb-logo" href="">
-                        <img src="assets/world_data-logo.svg" alt="World Data Logo">
+                    <a href="">
+                        <img class="icon" src="assets/table.svg" alt="Table">
+                        <span>A1-Table</span>
                     </a>
                 </li>
                 <li>
                     <a href="">
-                        <img class="nb-icon" src="assets/table.svg" alt="Table">
-                        A1-Table
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <img class="nb-icon" src="assets/settings.svg" alt="Parse">
+                        <img class="icon" src="assets/settings.svg" alt="Parse">
                         A2-Parse
                     </a>
                 </li>
                 <li>
                     <a href="">
-                        <img class="nb-icon" src="assets/save.svg" alt="Save">
+                        <img class="icon" src="assets/save.svg" alt="Save">
                         A2-Save
                     </a>
                 </li>
                 <li>
                     <a href="">
-                        <img class="nb-icon" src="assets/save.svg" alt="Print">
+                        <img class="icon" src="assets/print.svg" alt="Print">
                         A2-Print
                     </a>
                 </li>
                 <li>
                     <a href="">
-                        <img class="nb-icon" src="assets/server.svg" alt="REST">
+                        <img class="icon" src="assets/server.svg" alt="REST">
                         A3-REST
                     </a>
                 </li>
                 <li>
                     <a href="">
-                        <img class="nb-icon" src="assets/map.svg" alt="Vis">
+                        <img class="icon" src="assets/map.svg" alt="Vis">
                         A4-Vis
                     </a>
                 </li>
                 <li>
                     <a href="">
-                        <img class="nb-icon" src="assets/cube.svg" alt="3D">
+                        <img class="icon" src="assets/cube.svg" alt="3D">
                         A5-3D
                     </a>
                 </li>
-                <li class="menu">
-                    <img src="assets/menu.svg" alt="Dropdown">
-                </li>
             </ul>
-        </nav>
+        </div>
     </header>
     <main>
         <h1>World Data Overview ...</h1>
         <div>
         </div>
-        <table class="table">
-            <!-- populated with js -->
-        </table>
+        <div style="overflow-x:auto;">
+            <table class="table">
+                <!-- populated with js -->
+            </table>
+        </div>
     </main>
+    <footer>
+        <p>
+            erstellt von Nick Ruider
+        </p>
+
+    </footer>
 </body>
 <script src="script.js"></script>
 </html>
