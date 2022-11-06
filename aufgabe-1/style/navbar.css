@@ -8,6 +8,12 @@ nav {
     overflow: hidden;
 }
 
+#nav-spacer {
+    margin-left: 5vw;
+    transform: scale(1);
+    transition: all 0.15s ease;
+}
+
 #logo a {
     height: 64px;
     padding: 8px;
@@ -16,7 +22,7 @@ nav {
 #logo img {
     height: 48px;
     vertical-align: middle;
-    transition: filter 0.3s ease;
+    transition: filter 0.3s linear;
 }
 
 #logo:hover img {
@@ -150,12 +156,20 @@ li:hover .icon {
     #dropdown-button {
         display: block;
     }
+
+    #nav-spacer {
+        margin: 0;
+    }
 }
 
 /* medium size */
 @media only screen and (min-width: 800px) and (max-width: 1199px) {
     #dropdown-button, #dropdown-content {
         display: none !important;
+    }
+
+    #nav-spacer {
+        margin: 0;
     }
 }
 
