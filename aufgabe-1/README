@@ -3,6 +3,40 @@ Nick Ruider
 nick.ruider@mailbox.tu-dresden.de
 Matrikel-Nr.: 4935137
 
+
+
 Hinweise:
-- Schwellenwerte wurden nicht wie vorgeschlagen gewählt, um die Breite der Navigationleiste zu berücksichtigen
--> mit vorgeschlagenen Werten funktioniert Tablet-Design nicht gut (Nav-Bar über 2 Zeilen)
+- CSV-Datei nicht klassisch importiert
+-> Text in JS-Variable als String
+
+- Schwellenwerte wurden individuell gewählt, um die Breite der Navigationleiste zu berücksichtigen
+-> vorgeschlagene Werte aus der Vorlesung funktionieren nicht gut mit meiner Navbar
+
+- Navbar funktioniert gut, inklusive Animationen trotz Farbgradient (nativ nicht unterstützt)
+
+- Textbox ändert automatisch Spaltenanzahl, wie von Aufgabe vorgeschrieben
+
+- tbody wird mit JS gefüllt
+-> bei Deaktivieren von JavaScript führt das zu einer leeren Tabelle (theoretisch Schwachstelle!)
+
+- der im Video dargestellte Effekt des "smoothen" Entfernens der Tabellenspalten bei View-Width Änderung
+-> eigene, nicht schöner Workaround, um zumindest kein Überlaufen der Tabelle zu erlauben
+
+- Tabellensortierung funktioniert, wäre auch ausbaubar auf andere Tabellenspalten
+
+- einzelne Tabellenspalte entfernen funktioniert
+-> deutlich bessere Implementierung als bei Breitenänderung
+
+
+
+Quellen:
+- viel StackOverflow (leider nicht mitgeschrieben)
+- Navbar
+-> https://www.w3schools.com/css/css_navbar_horizontal.asp
+- Linear Gradient Transition
+-> https://keithjgrant.com/posts/2017/07/transitioning-gradients/
+- füllen der DOM durch JS
+-> https://www.valentinog.com/blog/html-table/
+- DOM-Elemente via JS "entfernen"
+-> https://stackoverflow.com/questions/35579569/hide-show-menu-onclick-javascript
+- ...

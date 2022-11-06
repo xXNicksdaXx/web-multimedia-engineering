@@ -1,6 +1,80 @@
+//--- EXECUTED CODE ---
+const items = dataToList(getData());
+populateTableBody();
+
+//--- FUNCTIONS ---
+function populateTableBody() {
+    let table = document.querySelector("tbody");
+    for(let element of items) {
+        let row = table.insertRow();
+        for (let key in element) {
+            let cell = row.insertCell();
+            let value = element[key];
+            if(!isNaN(value)) value = Number(Number(value).toFixed(3));
+            let text = document.createTextNode(value);
+            cell.appendChild(text);
+        }
+    }
+}
+
+function sortByName(reverse) {
+    items.sort(function (a, b) {
+        if(a.name > b.name) {
+            return (reverse === true) ? -1 : 1
+        }
+        else
+            return (reverse === true) ? 1 : -1
+    });
+    reloadTableBody();
+}
+
+function reloadTableBody() {
+    let table = document.querySelector("tbody");
+    table.replaceChildren();
+    populateTableBody(items);
+}
+
+function toggleMenu() {
+    let dropdownMenu = document.getElementById("dropdown-content");
+    if(dropdownMenu.style.display === "block")
+        dropdownMenu.style.display = "none";
+    else
+        dropdownMenu.style.display = "block";
+}
+
+function showHideColumn(i) {
+    let cells = document.querySelectorAll(`tr th:nth-child(${i}),tr td:nth-child(${i})`);
+    for(let cell of cells) {
+        if(cell.style.display !== "none")
+            cell.style.display = "none";
+        else
+            cell.style.display = "";
+    }
+
+}
+
 //--- DATA ---
-const csv =
-    "id ,name                ,birth rate per 1000,cell phones per 100,children per woman,electricity consumption per capita,gdp_per_capita,gdp_per_capita_growth,inflation annual,internet user per 100,life expectancy,military expenditure percent of gdp,gps_lat      ,gps_long\n" +
+function dataToList(csv){
+    const headers = ["id", "name", "birthRate", "cellPhoneRate", "childrenPerWoman", "electricity", "gdp",
+        "gdpGrowth", "inflation", "internetUsers", "lifeExpectancy"];
+    const lines = csv.split("\n");
+    const result = [];
+
+    for(let i = 1; i < lines.length - 3; i++) {
+        const obj = {};
+        const currentLine = lines[i].split(",");
+
+        for(let j = 0; j < headers.length; j++){
+            obj[headers[j]] = currentLine[j].trim();
+        }
+        result.push(obj);
+    }
+
+    return result;
+}
+
+function getData() {
+    return "id ,name                ,birth rate per 1000,cell phones per 100,children per woman,electricity per capita,gdp_per_capita,gdp_per_capita_growth,inflation annual,internet user per 100,life expectancy,military expenditure percent of gdp,gps_lat      ,gps_long\n" +
     "001,Brazil              ,16.405             ,90.01936334        ,1.862             ,2201.808724                       ,4424.758692   ,-1.520402823         ,8.228535058     ,39.22                ,74             ,1.615173655                        ,-14.235004000,-51.925280000\n" +
     "002,Canada              ,10.625             ,70.70997244        ,1.668             ,15119.76414                       ,25069.86915   ,-3.953353186         ,2.944408564     ,80.17086651          ,80.9           ,1.415710422                        ,56.130366000 ,-106.346771000\n" +
     "003,Chile               ,15.04              ,97.01862561        ,1.873             ,3276.06449                        ,6451.631126   ,-2.610485847         ,7.47050527      ,38.8                 ,78.8           ,3.064076139                        ,-35.675147000,71.542969000\n" +
@@ -26,73 +100,4 @@ const csv =
     "023,United Arab Emirates,14.027             ,153.7997194        ,1.903             ,9998.291079                       ,22507.00157   ,-11.99171952         ,8.549032358     ,64                   ,76.1           ,5.834881976                        ,23.424076000 ,53.847818000\n" +
     "024,United Kingdom      ,12.195             ,130.1742603        ,1.89              ,5685.635995                       ,27933.77767   ,-5.019251823         ,2.861406642     ,77.79971962          ,79.7           ,2.667209048                        ,52.355517700 ,-1.174319700\n" +
     "025,United States       ,14.191             ,89.14911634        ,2.002             ,12913.71143                       ,36539.22823   ,-4.342271218         ,1.152326348     ,71.21181627          ,78.3           ,4.822730027                        ,37.090240000 ,-95.712891000";
-const headers = ["id", "name", "birthRate", "cellPhoneRate", "childrenPerWoman", "electricity", "gdp", "gdpGrowth", "inflation", "internetUsers", "lifeExpectancy", "military", "gpsLat", "gpsLong"];
-
-
-
-//--- EXECUTED CODE ---
-const firstLine = csv.split("\n")[0].split(",");
-for(let i = 0; i < firstLine.length; i++) {
-    firstLine[i] = firstLine[i].replaceAll("_", " ");
-}
-const items = csvToList(csv);
-let table = document.querySelector("table");
-generateTableHead(table, firstLine);
-populateTableBody(table, items);
-
-
-
-//--- FUNCTIONS ---
-
-// source: https://www.valentinog.com/blog/html-table/
-function generateTableHead(table, data) {
-    let thead = table.createTHead();
-    let row = thead.insertRow();
-    for (let key of data) {
-        let th = document.createElement("th");
-        let text = document.createTextNode(key);
-        th.appendChild(text);
-        row.appendChild(th);
-    }
-}
-
-// source: https://www.valentinog.com/blog/html-table/
-function populateTableBody(table, data) {
-    for(let element of data) {
-        let row = table.insertRow();
-        for (let key in element) {
-            let cell = row.insertCell();
-            let value = element[key];
-            if(!isNaN(value)) value = Number(Number(value).toFixed(3));
-            let text = document.createTextNode(value);
-            cell.appendChild(text);
-        }
-    }
-}
-
-function csvToList(csv){
-    const lines = csv.split("\n");
-    const result = [];
-
-    for(let i = 1; i < lines.length; i++) {
-        const obj = {};
-        const currentLine = lines[i].split(",");
-
-        for(let j = 0; j < headers.length; j++){
-            obj[headers[j]] = currentLine[j];
-        }
-        result.push(obj);
-    }
-
-    return result;
-}
-
-// source: https://stackoverflow.com/questions/35579569/hide-show-menu-onclick-javascript
-function toggleMenu() {
-    let dropdownMenu = document.getElementById("dropdown-content");
-    if(dropdownMenu.style.display === "block")
-        dropdownMenu.style.display = "none";
-    else {
-        dropdownMenu.style.display = "block";
-    }
 }

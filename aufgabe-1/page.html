@@ -49,7 +49,7 @@
                     </li>
                     <li>
                         <a href="">
-                            <img class="icon" src="assets/server.svg" alt="REST">
+                            <img class="icon" src="assets/node.svg" alt="REST">
                             A3-REST
                         </a>
                     </li>
@@ -99,7 +99,7 @@
                 </li>
                 <li>
                     <a href="">
-                        <img class="icon" src="assets/server.svg" alt="REST">
+                        <img class="icon" src="assets/node.svg" alt="REST">
                         A3-REST
                     </a>
                 </li>
@@ -120,19 +120,66 @@
     </header>
     <main>
         <h1>World Data Overview ...</h1>
-        <div>
+        <div class="container">
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                <a>www.loremipsum.de</a>
+            </p>
         </div>
-        <div style="overflow-x:auto;">
-            <table class="table">
+        <div>
+            Show/Hide:
+            <button class="filter" onclick="showHideColumn(3)">birth rate</button> |
+            <button class="filter" onclick="showHideColumn(4)">cell phones</button> |
+            <button class="filter" onclick="showHideColumn(5)">children</button> |
+            <button class="filter" onclick="showHideColumn(6)">electricity</button> |
+            <button class="filter" onclick="showHideColumn(7)">gdp</button> |
+            <button class="filter" onclick="showHideColumn(8)">gdp growth</button> |
+            <button class="filter" onclick="showHideColumn(9)">inflation</button> |
+            <button class="filter" onclick="showHideColumn(10)">internet</button> |
+            <button class="filter" onclick="showHideColumn(11)">life expectancy</button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>id </th>
+                    <th>
+                        name
+                        <button class="sort" onclick="sortByName(false)"><img class="sort-icon" src="assets/down.svg" alt="asc"></button>
+                        <button class="sort" onclick="sortByName(true)"><img class="sort-icon" src="assets/up.svg" alt="desc"></button>
+                    </th>
+                    <th>birth rate / 1000</th>
+                    <th>cell phones / 100</th>
+                    <th>children / woman</th>
+                    <th>electricity / capita</th>
+                    <th>gdp / capita</th>
+                    <th>gdp growth / capita</th>
+                    <th>inflation annual</th>
+                    <th>internet user / 100</th>
+                    <th>life expectancy</th>
+                </tr>
+            </thead>
+            <tbody>
                 <!-- populated with js -->
-            </table>
+            </tbody>
+        </table>
+        <div>
+            Show/Hide:
+            <button class="filter" onclick="showHideColumn(3)">birth rate</button> |
+            <button class="filter" onclick="showHideColumn(4)">cell phones</button> |
+            <button class="filter" onclick="showHideColumn(5)">children</button> |
+            <button class="filter" onclick="showHideColumn(6)">electricity</button> |
+            <button class="filter" onclick="showHideColumn(7)">gdp</button> |
+            <button class="filter" onclick="showHideColumn(8)">gdp growth</button> |
+            <button class="filter" onclick="showHideColumn(9)">inflation</button> |
+            <button class="filter" onclick="showHideColumn(10)">internet</button> |
+            <button class="filter" onclick="showHideColumn(11)">life expectancy</button>
         </div>
     </main>
     <footer>
-        <p>
-            erstellt von Nick Ruider
-        </p>
-
+        <div class="footer">
+            <p style="float: left">first course exercise</p>
+            <p style="float: right">solution created by Nick Ruider</p>
+        </div>
     </footer>
 </body>
 <script src="script.js"></script>

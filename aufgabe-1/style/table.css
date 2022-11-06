@@ -1,5 +1,4 @@
 table {
-    width: 90%;
     border-collapse: collapse;
     alignment: center;
 }
@@ -8,13 +7,100 @@ th {
     text-decoration-style: double;
     border-bottom: 2px solid #bbbbbb;
     background-color: #ffffff;
+    align-items: center;
 }
 
 th, td {
     text-align: left;
-    padding: 4px;
+    padding: 8px 16px 8px 4px;
+    white-space: nowrap;
 }
 
 tr:nth-child(odd) {
     background-color: #bbbbbb;
+}
+
+.sort {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sort-icon {
+    width: 16px;
+    height: 16px;
+    filter: opacity(0.7);
+    transition: opacity 0.5s ease-in-out;
+}
+
+.sort-icon:hover {
+    filter: opacity(1);
+}
+
+.filter {
+    margin: 0;
+    font-size: 14px;
+    border: none;
+    color: grey;
+    text-decoration: underline;
+    transition: 0.3s ease-in-out;
+}
+
+.filter:hover {
+    color: darkgreen;
+    text-decoration-color: transparent;
+}
+
+@media screen and (max-width: 1560px) {
+    tr th:nth-child(11),tr td:nth-child(11) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 1420px) {
+    tr th:nth-child(10),tr td:nth-child(10) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    tr th:nth-child(9),tr td:nth-child(9) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 1108px) {
+    tr th:nth-child(8),tr td:nth-child(8) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 932px) {
+    tr th:nth-child(7),tr td:nth-child(7) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 814px) {
+    tr th:nth-child(6),tr td:nth-child(6) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 652px) {
+    tr th:nth-child(5),tr td:nth-child(5) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 490px) {
+    tr th:nth-child(4),tr td:nth-child(4) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 334px) {
+    tr th:nth-child(3),tr td:nth-child(3) {
+        display: none !important;
+    }
 }

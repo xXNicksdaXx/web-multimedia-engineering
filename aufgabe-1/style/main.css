@@ -7,6 +7,11 @@
     box-sizing: border-box;
 }
 
+main {
+    padding: 16px 5%;
+    align-items: center;
+}
+
 h1 {
     font-size: 48px;
     margin-bottom: 16px;
@@ -14,30 +19,36 @@ h1 {
 }
 
 a {
-    text-decoration: none;
+    text-decoration: underline;
+    color: #00bb00;
+    transition: 0.3s ease-in-out;
 }
 
 a:hover {
-    text-decoration: underline;
+    text-decoration-color: transparent;
+    color: darkgreen;
 }
 
-/* small size */
-@media only screen and (max-width: 767px) {
-    main {
-        padding: 32px 8px;
-    }
+.container {
+    border-top: 1px solid #00bb00;
+    border-left: 1px solid #bbbbbb;
+    border-right: 1px solid #bbbbbb;
+    border-bottom: 1px solid #bbbbbb;
+    border-radius: 0 0 4px 4px;
+    padding: 16px;
+    column-width: 350px;
+    column-gap: 32px;
+    column-count: 3;
+    margin-bottom: 16px;
 }
 
-/* medium size */
-@media only screen and (min-width: 768px) {
-    main {
-        padding: 32px 8px;
-    }
+footer {
+    padding: 16px 5%;
 }
 
-/* large size */
-@media only screen and (min-width: 1200px) {
-    main {
-        padding: 32px 5%;
-    }
+.footer {
+    border-top: 1px solid #00bb00;
+    padding: 8px 0;
+    margin-bottom: 32px;
+    display: block;
 }
