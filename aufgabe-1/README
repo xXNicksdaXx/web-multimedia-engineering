@@ -19,13 +19,14 @@ Hinweise:
 - tbody wird mit JS gefüllt
 -> bei Deaktivieren von JavaScript führt das zu einer leeren Tabelle (theoretisch Schwachstelle!)
 
-- der im Video dargestellte Effekt des "smoothen" Entfernens der Tabellenspalten bei View-Width Änderung
--> eigene, nicht schöner Workaround, um zumindest kein Überlaufen der Tabelle zu erlauben
+- Tabelle entfernt spalten bei wenig Platz
+-> Umsetzung nicht "schön", immerhin funktioniert es
 
 - Tabellensortierung funktioniert, wäre auch ausbaubar auf andere Tabellenspalten
+-> Icons sind grau statt grün, hätten jedoch auch umgefärbt werden können (zeitaufwand hat sich nicht gelohnt ...)
 
 - einzelne Tabellenspalte entfernen funktioniert
--> deutlich bessere Implementierung als bei Breitenänderung
+-> bessere Implementierung als bei Reaktion auf Platzmangel
 
 
 
