@@ -25,6 +25,7 @@ tr:nth-child(odd) {
 
 .sort {
     border: none;
+    background-color: transparent;
     margin: 0;
     padding: 0;
 }
@@ -45,12 +46,13 @@ tr:nth-child(odd) {
     font-size: 14px;
     border: none;
     color: grey;
+    background-color: transparent;
     text-decoration: underline;
     transition: 0.3s ease-in-out;
 }
 
 .filter:hover {
-    color: darkgreen;
+    color: green;
     text-decoration-color: transparent;
 }
 
