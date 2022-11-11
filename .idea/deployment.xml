@@ -5,7 +5,7 @@
       <paths name="XAMPP PHP">
         <serverdata>
           <mappings>
-            <mapping deploy="web-multimedia-engineering" local="$PROJECT_DIR$" web="/wme/" />
+            <mapping deploy="web-multimedia-engineering" local="$PROJECT_DIR$" web="/web-multimedia-engineering/" />
           </mappings>
         </serverdata>
       </paths>
