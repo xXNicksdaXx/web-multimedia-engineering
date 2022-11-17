@@ -18,7 +18,11 @@ class WorldDataParser {
                 //foreach row create new array and add data
                 $row = array();
                 for($i = 0; $i < $length; $i++) {
-                    $row[$header[$i]] = trim($data[$i]);
+                    $value = trim($data[$i]);
+                    if(is_numeric($value)) {
+                        $value = round($value, 3);
+                    }
+                    $row[$header[$i]] = $value;
                 }
                 array_push($result, $row);
             }
@@ -28,8 +32,8 @@ class WorldDataParser {
     }
 
     /**
-     * @param $data
-     * @return DOMDocument
+     * @param $data ~ array containing the data from csv
+     * @return boolean ~ status if XML saving was successful
      * @source:     https://stackoverflow.com/questions/1397036/how-to-convert-array-to-simplexml
      *              https://stackoverflow.com/questions/8615422/php-xml-how-to-output-nice-format
      */
@@ -49,15 +53,33 @@ class WorldDataParser {
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
         $xml->loadXML($simpleXML->asXML());
-        $xml->save("world_data.xml");
-        return $xml;
+
+        if($xml->save("world_data.xml"))
+            return true;
+        else
+            return false;
     }
 
-    private function populateCountryInXML($data, &$xml_data) {
+    /**
+     * @param $xmlPath ~ relative path from ./php-xml to xml file
+     * @param $xsltPath ~ relative path from ./php-xml to xsl file
+     * @return string ~ returns transformed xml as string
+     * @source:     https://www.php.net/manual/en/xsltprocessor.transformtoxml.php
+     */
+    public function printXML($xmlPath, $xsltPath) {
+        // get both xml and xslt from path
+        $xml = new DOMDocument();
+        $xml->load($xmlPath);
+        $xsl = new DOMDocument();
+        $xsl->load($xsltPath);
 
-    }
-
-    public function printXML() {
-
+        // transform xml to html string
+        $proc = new XSLTProcessor;
+        $proc->importStylesheet($xsl);
+        if($string = $proc->transformToXml($xml))
+            return $string;
+        else
+            return "";
     }
 }
+

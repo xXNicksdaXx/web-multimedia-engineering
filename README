@@ -6,38 +6,15 @@ Matrikel-Nr.: 4935137
 
 
 Hinweise:
-- CSV-Datei nicht klassisch importiert
--> Text in JS-Variable als String
+- XML Datei ist in .zip enthalten, wird aber automatisch beim nächsten Speichern überschrieben
+- transform.xsl ist der stylesheet zur Umformung der XML Datei
+- csv-Datei ist unter ./assets hinterlegt
+- Quellen stehen bei den Methoden
+- weitere Hinweise zum Code stehen direkt an den jeweiligen Stellen
 
-- Schwellenwerte wurden individuell gewählt, um die Breite der Navigationleiste zu berücksichtigen
--> vorgeschlagene Werte aus der Vorlesung funktionieren nicht gut mit meiner Navbar
-
-- Navbar funktioniert gut, inklusive Animationen trotz Farbgradient (nativ nicht unterstützt)
-
-- Textbox ändert automatisch Spaltenanzahl, wie von Aufgabe vorgeschrieben
-
-- tbody wird mit JS gefüllt
--> bei Deaktivieren von JavaScript führt das zu einer leeren Tabelle (theoretisch Schwachstelle!)
-
-- Tabelle entfernt spalten bei wenig Platz
--> Umsetzung nicht "schön", immerhin funktioniert es
-
-- Tabellensortierung funktioniert, wäre auch ausbaubar auf andere Tabellenspalten
--> Icons sind grau statt grün, hätten jedoch auch umgefärbt werden können (zeitaufwand hat sich nicht gelohnt ...)
-
-- einzelne Tabellenspalte entfernen funktioniert
--> bessere Implementierung als bei Reaktion auf Platzmangel
-
-
-
-Quellen:
-- viel StackOverflow (leider nicht mitgeschrieben)
-- Navbar
--> https://www.w3schools.com/css/css_navbar_horizontal.asp
-- Linear Gradient Transition
--> https://keithjgrant.com/posts/2017/07/transitioning-gradients/
-- füllen der DOM durch JS
--> https://www.valentinog.com/blog/html-table/
-- DOM-Elemente via JS "entfernen"
--> https://stackoverflow.com/questions/35579569/hide-show-menu-onclick-javascript
-- ...
+- nach Feedback von Aufgabe 1 wurde Datensatz direkt in HTML eingefügt
+-> vorher mithilfe von JS in DOM eingefügt
+- Sortierung in JS geändert
+-> nicht kompatibel mit PHP Teil
+- gps_lat und gps_long werden nicht transformiert
+-> wurden in Aufgabe 1 nicht eingefügt, Konsistenz der Tabelle wird erhalten
