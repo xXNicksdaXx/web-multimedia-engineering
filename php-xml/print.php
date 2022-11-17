@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="../style/navbar.css">
     <link rel="stylesheet" href="../style/table.css">
     <link rel="stylesheet" href="../style/main.css">
-
-    <link>
 </head>
 <body>
 <header>
