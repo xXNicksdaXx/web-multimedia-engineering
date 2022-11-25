@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="Nick Ruider">
+	<meta name="description" content="Aufgabe 3">
+	<meta name="keywords" content="JavaScript, NodeJS, AJAX, REST">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Web-Multimedia-Engineering</title>
+
+	<link rel="stylesheet" href="../style/reset.css">
+	<link rel="stylesheet" href="../style/navbar.css">
+	<link rel="stylesheet" href="../style/table.css">
+	<link rel="stylesheet" href="../style/main.css">
+	<link rel="stylesheet" href="../style/container.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<body>
+	<header>
+		<nav>
+			<div id="nav-spacer"></div>
+			<div id="logo">
+				<a href="">
+					<img src="../assets/world_data-logo.svg" alt="World Data Logo">
+				</a>
+			</div>
+			<div class="horizontal">
+				<ul>
+					<li>
+						<a href="../page.html">
+							<img class="icon" src="../assets/table.svg" alt="Table">
+							<span>A1-Table</span>
+						</a>
+					</li>
+					<li>
+						<a href="../php-xml/parse.php">
+							<img class="icon" src="../assets/settings.svg" alt="Parse">
+							A2-Parse
+						</a>
+					</li>
+					<li>
+						<a href="../php-xml/save.php">
+							<img class="icon" src="../assets/save.svg" alt="Save">
+							A2-Save
+						</a>
+					</li>
+					<li>
+						<a href="../php-xml/print.php">
+							<img class="icon" src="../assets/print.svg" alt="Print">
+							A2-Print
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img class="icon" src="../assets/node.svg" alt="REST">
+							A3-REST
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img class="icon" src="../assets/map.svg" alt="Vis">
+							A4-Vis
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img class="icon" src="../assets/cube.svg" alt="3D">
+							A5-3D
+						</a>
+					</li>
+				</ul>
+			</div>
+			<button id="dropdown-button" onclick="toggleMenu()">
+				<img src="../assets/menu.svg" alt="Menu">
+			</button>
+		</nav>
+		<div id="dropdown-content">
+			<ul>
+				<li>
+					<a href="../page.html">
+						<img class="icon" src="../assets/table.svg" alt="Table">
+						<span>A1-Table</span>
+					</a>
+				</li>
+				<li>
+					<a href="../php-xml/parse.php">
+						<img class="icon" src="../assets/settings.svg" alt="Parse">
+						A2-Parse
+					</a>
+				</li>
+				<li>
+					<a href="../php-xml/save.php">
+						<img class="icon" src="../assets/save.svg" alt="Save">
+						A2-Save
+					</a>
+				</li>
+				<li>
+					<a href="../php-xml/print.php">
+						<img class="icon" src="../assets/print.svg" alt="Print">
+						A2-Print
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<img class="icon" src="../assets/node.svg" alt="REST">
+						A3-REST
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<img class="icon" src="../assets/map.svg" alt="Vis">
+						A4-Vis
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<img class="icon" src="../assets/cube.svg" alt="3D">
+						A5-3D
+					</a>
+				</li>
+			</ul>
+		</div>
+	</header>
+	<main>
+		<h1>World Data Overview ...</h1>
+
+		<div class="rest-interface">
+			<div class="rest-country">
+				<div class="rest-api-block">
+					<h2>Filter Countries</h2>
+					<form name="country_filter" id="country_filter" method="GET">
+						<p>
+							<label for="country_filter_id">country id</label>
+							<input type="text" name="country_filter_id" id="country_filter_id">
+						</p>
+						<p>
+							<label for="country_filter_range">country id range (eg: 2-5)</label>
+							<input type="text" name="country_filter_range" id="country_filter_range">
+						</p>
+						<p class="submit">
+							<input class="green_btn" type="submit" name="submit" id="filter_submit" value="Filter Countries">
+						</p>
+					</form>
+				</div>
+			</div>
+			<div class="rest-prop">
+				<div class="rest-api-block">
+					<h2>Properties</h2>
+					<p>
+						<select id="prop_selection">
+							<!--load options via ajax-->
+						</select>
+					</p>
+					<button class="green_btn" id="show_selected_prop">Show</button>
+					<button class="green_btn" id="hide_selected_prop">Hide</button>
+				</div>
+			</div>
+			<div class="rest-add">
+				<div class="rest-api-block">
+					<h2>Add Country</h2>
+					<form name="country_add" id="country_add" method="POST">
+						<p>
+							<label for="country_name">country name</label>
+							<input type="text" name="country_name" id="country_name">
+						</p>
+						<p>
+							<label for="country_birth">birth rate / 1000</label>
+							<input type="number" name="country_birth" id="country_birth">
+						</p>
+						<p>
+							<label for="country_cellphone">cellphones / 100</label>
+							<input type="number" name="country_cellphone" id="country_cellphone">
+						</p>
+						<p class="submit">
+							<input class="green_btn" type="submit" name="submit" id="add_submit" value="Add Country">
+						</p>
+					</form>
+				</div>
+			</div>
+			<div class="rest-delete">
+				<div class="rest-api-block">
+					<h2>Delete Country</h2>
+					<form name="country_delete" id="country_delete" method="DELETE">
+						<p>
+							<label for="country_delete_id">Country ID to delete</label>
+							<input type="text" name="country_delete_id" id="country_delete_id">
+						</p>
+						<p class="submit">
+							<input class="green_btn" type="submit" name="submit" id="rm_submit" value="Remove Country">
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+		<br/><br/>
+		<table class="table">
+			<thead>
+			<tr>
+				<th>id </th>
+				<th>
+					name
+					<button class="sort" onclick="sortByName(false)"><img class="sort-icon" src="../assets/down.svg" alt="asc"></button>
+					<button class="sort" onclick="sortByName(true)"><img class="sort-icon" src="../assets/up.svg" alt="desc"></button>
+				</th>
+				<th>birth rate / 1000</th>
+				<th>cell phones / 100</th>
+				<th>children / woman</th>
+				<th>electricity / capita</th>
+				<th>gdp / capita</th>
+				<th>gdp growth / capita</th>
+				<th>inflation annual</th>
+				<th>internet user / 100</th>
+				<th>life expectancy</th>
+			</tr>
+			</thead>
+		</table>
+	</main>
+	<footer>
+		<div class="footer">
+			<p style="float: left">course exercise - web-multimedia-engineering</p>
+			<p style="float: right">solution created by Nick Ruider</p>
+		</div>
+	</footer>
+</body>
+<script src="ajax.js"></script>
+<script src="../script.js"></script>
+</html>
