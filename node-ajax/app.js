@@ -32,8 +32,7 @@ app.get('/items/:id1/:id2', (req, res) => {
 
     const result = worldDataJson.filter((element) => {
         const currentID = parseInt(element["id"]);
-        let bool = id1 <= currentID && currentID <= id2;
-        return bool;
+        return id1 <= currentID && currentID <= id2;
     });
 
     res.json(result);
@@ -105,8 +104,17 @@ app.get('/properties', (req, res) => {
 });
 
 app.get('/properties/:num', (req, res) => {
-    const num = parseInt(req.params.num);
-
+    const num = req.params.num.replaceAll("_", " ");
+    const filter = worldDataJson.map((item) => {
+        const keys = Object.keys(item);
+        const keywords = ["id", "name", num];
+        for(let key of keys) {
+            if(!keywords.includes(key.replaceAll("_", " ")))
+                delete item[key];
+        }
+        return item;
+    });
+    res.json(filter);
 });
 
 csvToJson("assets/world_data_v3.csv");
