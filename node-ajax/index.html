@@ -129,7 +129,7 @@
 			<div class="rest-country">
 				<div class="rest-api-block">
 					<h2>Filter Countries</h2>
-					<form name="country_filter" id="country_filter" method="GET">
+					<form name="country_filter" id="country_filter" method="GET" onsubmit="return false">
 						<p>
 							<label for="country_filter_id">country id</label>
 							<input type="text" name="country_filter_id" id="country_filter_id">
@@ -196,24 +196,9 @@
 		<br/><br/>
 		<table class="table">
 			<thead>
-			<tr>
-				<th>id </th>
-				<th>
-					name
-					<button class="sort" onclick="sortByName(false)"><img class="sort-icon" src="../assets/down.svg" alt="asc"></button>
-					<button class="sort" onclick="sortByName(true)"><img class="sort-icon" src="../assets/up.svg" alt="desc"></button>
-				</th>
-				<th>birth rate / 1000</th>
-				<th>cell phones / 100</th>
-				<th>children / woman</th>
-				<th>electricity / capita</th>
-				<th>gdp / capita</th>
-				<th>gdp growth / capita</th>
-				<th>inflation annual</th>
-				<th>internet user / 100</th>
-				<th>life expectancy</th>
-			</tr>
 			</thead>
+			<tbody>
+			</tbody>
 		</table>
 	</main>
 	<footer>

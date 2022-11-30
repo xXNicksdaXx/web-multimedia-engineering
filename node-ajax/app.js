@@ -1,13 +1,16 @@
 const express = require('express');
 const csv = require('csvtojson');
+const cors = require('cors')
+
 const app = express();
 const port = 3000;
 let worldDataJson;
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/items', (req, res) => {
-    res.json(worldDataJson);
+    res.json(removeOverheadColumns(worldDataJson));
 });
 
 app.get('/items/:id', (req, res) => {
@@ -18,16 +21,18 @@ app.get('/items/:id', (req, res) => {
         if(id === currentId)
             result = element;
     }
-    res.json(result);
+    res.json(removeOverheadColumns([result]));
 });
 
 app.get('/items/:id1/:id2', (req, res) => {
     let id1 = parseInt(req.params.id1);
     let id2 = parseInt(req.params.id2);
+    let reverse = false;
     if (id1 > id2) {
         let p = id1;
         id1 = id2;
         id2 = p;
+        reverse = true;
     }
 
     const result = worldDataJson.filter((element) => {
@@ -35,7 +40,10 @@ app.get('/items/:id1/:id2', (req, res) => {
         return id1 <= currentID && currentID <= id2;
     });
 
-    res.json(result);
+    if (reverse)
+        result.reverse();
+
+    res.json(removeOverheadColumns(result));
 });
 
 app.post('/items', (req, res) => {
@@ -100,7 +108,7 @@ app.delete('/items/:id', (req, res) => {
 });
 
 app.get('/properties', (req, res) => {
-    res.json(worldDataJson);
+    res.json(removeOverheadColumns(worldDataJson));
 });
 
 app.get('/properties/:num', (req, res) => {
@@ -126,6 +134,24 @@ function csvToJson(filePath) {
     csv()
         .fromFile(filePath)
         .then((jsonObj) => {
+            jsonObj.map((item) => {
+                for(const key in item) {
+                    if(!isNaN(item[key]))
+                        item[key] = Number(Number(item[key]).toFixed(3));
+                }
+            })
             worldDataJson = jsonObj;
         });
+}
+
+function removeOverheadColumns(data) {
+    return data.map((item) => {
+        const keys = Object.keys(item);
+        const keywords = ["gps_lat", "gps_long", "military expenditure percent of gdp"];
+        for(let key of keys) {
+            if(keywords.includes(key))
+                delete item[key];
+        }
+        return item;
+    });
 }
