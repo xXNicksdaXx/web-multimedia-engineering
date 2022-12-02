@@ -5,6 +5,9 @@ const cors = require('cors')
 const app = express();
 const port = 3000;
 let worldDataJson;
+let currentMaxId;
+
+
 
 app.use(express.json());
 app.use(cors());
@@ -47,40 +50,23 @@ app.get('/items/:id1/:id2', (req, res) => {
 });
 
 app.post('/items', (req, res) => {
-    let temporaryJSON = worldDataJson;
-    let length = temporaryJSON.length;
-
-    for(let input of req.body) {
-        // validation of input element
-        // 1. valid id
-        if (input["id"] == null) {
-            res.send('Element does not possess id!');
-            return;
-        } else {
-            let duplicate = null;
-            let inputId = parseInt(input["id"]);
-            for(let element of temporaryJSON) {
-                let currentId = parseInt(element["id"]);
-                if(inputId === currentId)
-                    duplicate = element;
-            }
-            if (duplicate != null) {
-                res.send(`Element with id ${inputId} does already exist!`);
+    if(isIterable(req.body)) {
+        for(let input of req.body) {
+            const msg = addCountryToJson(input);
+            if(msg !== 0) {
+                res.send(msg);
                 return;
             }
         }
-        // valid amount of keys
-        if (Object.keys(input).length < 3) {
-            res.send('Element does not possess enough keys!');
+        res.send("Updated json successfully!");
+    } else {
+        const msg = addCountryToJson(req.body);
+        if(msg !== 0) {
+            res.send(msg);
             return;
         }
-
-        temporaryJSON[length] = input;
-        length++;
+        res.send("Updated json successfully!");
     }
-
-    worldDataJson = temporaryJSON;
-    res.send('Updated json successfully!');
 });
 
 app.delete('/items', (req, res) => {
@@ -141,6 +127,7 @@ function csvToJson(filePath) {
                 }
             })
             worldDataJson = jsonObj;
+            currentMaxId = worldDataJson.length + 1;
         });
 }
 
@@ -154,4 +141,50 @@ function removeOverheadColumns(data) {
         }
         return item;
     });
+}
+
+function isIterable(obj) {
+    // checks for null and undefined
+    if (obj == null) {
+        return false;
+    }
+    return typeof obj[Symbol.iterator] === 'function';
+}
+
+function addCountryToJson(item) {
+    let length = worldDataJson.length;
+
+    let result = {
+        "id": currentMaxId
+    };
+
+    // validation of input element
+    // 1. valid name
+    if (item["name"] == null) {
+        return 'Element does not possess name!';
+    } else {
+        let duplicate = null;
+        for(let element of worldDataJson) {
+            if(item["name"] === element["name"])
+                duplicate = element;
+        }
+        if (duplicate != null) {
+            return `Element with name ${item["name"]} does already exist!`;
+        }
+    }
+
+    // valid amount of keys
+    if (Object.keys(item).length < 3) {
+        return 'Element does not possess enough keys!';
+    }
+
+    for(const key in item) {
+        if(!isNaN(item[key]))
+            item[key] = Number(Number(item[key]).toFixed(3));
+        result[key] = item[key];
+    }
+
+    worldDataJson[length] = result;
+    currentMaxId++;
+    return 0;
 }
