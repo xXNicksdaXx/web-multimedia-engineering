@@ -2,29 +2,40 @@ const express = require('express');
 const csv = require('csvtojson');
 const cors = require('cors')
 
-const app = express();
-const port = 3000;
+
+/**
+ *  init
+ */
+// init global variables
 let worldDataJson;
+let properties;
 let currentMaxId;
 
-
-
+// init api
+const app = express();
+const port = 3000;
 app.use(express.json());
 app.use(cors());
 
-app.get('/items', (req, res) => {
-    res.json(removeOverheadColumns(worldDataJson));
-});
+
+/**
+ *  routes
+ */
+app.get('/items', (req, res) => res.json(worldDataJson));
 
 app.get('/items/:id', (req, res) => {
     const id = parseInt(req.params.id);
+    if(isNaN(id)) {
+        res.send(`${req.params.id} is not a number!`);
+        return;
+    }
     let result = {};
     for(let element of worldDataJson) {
         let currentId = parseInt(element["id"]);
         if(id === currentId)
             result = element;
     }
-    res.json(removeOverheadColumns([result]));
+    res.json([result]);
 });
 
 app.get('/items/:id1/:id2', (req, res) => {
@@ -46,7 +57,7 @@ app.get('/items/:id1/:id2', (req, res) => {
     if (reverse)
         result.reverse();
 
-    res.json(removeOverheadColumns(result));
+    res.json(result);
 });
 
 app.post('/items', (req, res) => {
@@ -77,6 +88,10 @@ app.delete('/items', (req, res) => {
 
 app.delete('/items/:id', (req, res) => {
     const id = parseInt(req.params.id);
+    if(isNaN(id)) {
+        res.send(`${req.params.id} is not a number!`);
+        return;
+    }
     let foundElement = false;
     worldDataJson = worldDataJson.filter((element) => {
         if(id !== parseInt(element["id"])){
@@ -86,29 +101,36 @@ app.delete('/items/:id', (req, res) => {
             return false;
         }
     });
-    if(foundElement) {
-        res.send(`Did not find item with id ${id}!`);
-    } else {
+    if(foundElement)
         res.send(`Deleted item with id ${id} from json successfully!`);
-    }
+    else
+        res.send(`Did not find item with id ${id}!`);
 });
 
 app.get('/properties', (req, res) => {
-    res.json(removeOverheadColumns(worldDataJson));
+    res.json(properties);
 });
 
 app.get('/properties/:num', (req, res) => {
-    const num = req.params.num.replaceAll("_", " ");
-    const filter = worldDataJson.map((item) => {
-        const keys = Object.keys(item);
-        const keywords = ["id", "name", num];
-        for(let key of keys) {
-            if(!keywords.includes(key.replaceAll("_", " ")))
-                delete item[key];
+    const index = parseInt(req.params.num);
+    const visibility = req.headers["visible"];
+
+    let property = properties.filter((property) => {
+        if(property["index"] === index) {
+            if(visibility != null)
+                property["shown"] = Boolean(Number(visibility));
+            return true;
         }
-        return item;
+        return false;
     });
-    res.json(filter);
+
+    if(property.length === 0) {
+        res.json({});
+    } else if(property.length === 1) {
+        res.json(property.pop());
+    } else {
+        res.json({});
+    }
 });
 
 csvToJson("assets/world_data_v3.csv");
@@ -116,31 +138,49 @@ app.listen(port, () => {
     console.log(`REST listening on port ${port}`)
 });
 
+
+
+/**
+ *  useful functions
+ */
 function csvToJson(filePath) {
     csv()
         .fromFile(filePath)
         .then((jsonObj) => {
             jsonObj.map((item) => {
+                // remove last three attributes (looks better when not shown)
+                const keys = Object.keys(item);
+                const keywords = ["gps_lat", "gps_long", "military expenditure percent of gdp"];
+                for(let key of keys) {
+                    if(keywords.includes(key))
+                        delete item[key];
+                }
+
+                // round numbers
                 for(const key in item) {
                     if(!isNaN(item[key]))
                         item[key] = Number(Number(item[key]).toFixed(3));
                 }
+                return item;
             })
             worldDataJson = jsonObj;
+            retrieveProperties(worldDataJson[0]);
             currentMaxId = worldDataJson.length + 1;
         });
 }
 
-function removeOverheadColumns(data) {
-    return data.map((item) => {
-        const keys = Object.keys(item);
-        const keywords = ["gps_lat", "gps_long", "military expenditure percent of gdp"];
-        for(let key of keys) {
-            if(keywords.includes(key))
-                delete item[key];
-        }
-        return item;
-    });
+function retrieveProperties(exampleElement) {
+    properties = [];
+    let i = 0;
+    const keys = Object.keys(exampleElement);
+    for(let key of keys) {
+        properties[i] = {
+            "index": i+1,
+            "name": key.replaceAll("_", " "),
+            "shown": true
+        };
+        i++;
+    }
 }
 
 function isIterable(obj) {
