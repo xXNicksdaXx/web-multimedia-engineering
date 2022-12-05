@@ -6,15 +6,14 @@ Matrikel-Nr.: 4935137
 
 
 Hinweise:
-- XML Datei ist in .zip enthalten, wird aber automatisch beim nächsten Speichern überschrieben
-- transform.xsl ist der stylesheet zur Umformung der XML Datei
-- csv-Datei ist unter ./assets hinterlegt
-- Quellen stehen bei den Methoden
-- weitere Hinweise zum Code stehen direkt an den jeweiligen Stellen
-
-- nach Feedback von Aufgabe 1 wurde Datensatz direkt in HTML eingefügt
--> vorher mithilfe von JS in DOM eingefügt
-- Sortierung in JS geändert
--> nicht kompatibel mit PHP Teil
-- gps_lat und gps_long werden nicht transformiert
--> wurden in Aufgabe 1 nicht eingefügt, Konsistenz der Tabelle wird erhalten
+- beim Reloaden wird Startzustand hergestellt
+- properties waren schwer zu verstehen, was mit /properties/num passieren soll
+-> eigene Interpretation:
+    jedes Property erhält ein Objekt:
+    {   id:     number
+        name:   string
+        shown:  boolean
+    }
+    -> speichert Zustände für select Element, und könnte die derzeitige Sichtbarkeit speichern
+        - Speicherung wird nicht genutzt, aber stets aktuell gehalten
+- bei den json-Requests wird bei einem Fehler ein leeres json Objekt zurückgegeben

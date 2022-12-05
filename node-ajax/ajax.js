@@ -1,5 +1,4 @@
 const uri = "http://localhost:3000/";
-const standardHeader = '<tr><th>id</th><th>name<button class="sort" onClick="sortByName(false)"><img class="sort-icon" src="../assets/down.svg" alt="asc"></button><button class="sort" onClick="sortByName(true)"><img class="sort-icon" src="../assets/up.svg" alt="desc"></button></th><th>birth rate / 1000</th><th>cell phones / 100</th><th>children / woman</th><th>electricity / capita</th><th>gdp / capita</th><th>gdp growth / capita</th><th>inflation annual</th><th>internet user / 100</th><th>life expectancy</th></tr>';
 
 
 /**
@@ -11,11 +10,7 @@ $(document).ready(() => {
         type: "GET",
         url: uri + "items",
         contentType: "application/json",
-        success: (result) => {
-            emptyHeadAndBody();
-            $("thead").append(standardHeader);
-            $("tbody").append(jsonToTableBody(result));
-        },
+        success: (result) => $("tbody").empty().append(jsonToTableBody(result)),
     });
 
     // fill select field
@@ -32,7 +27,6 @@ $(document).ready(() => {
     $(document).ajaxStop(() => {
         const message = sessionStorage.getItem("message");
         if (message) {
-            console.log(message);
             alert(message);
             sessionStorage.removeItem("message");
         }
@@ -44,54 +38,56 @@ $(document).ready(() => {
  *  GET id / range of countries from REST-API
  */
 $("#country_filter").on("submit", function () {
+    // get input
     let id = $("#country_filter_id").val();
     let range = $("#country_filter_range").val();
 
+    // if range is filled, make range call to rest api
     if(range.trim().length !== 0) {
+        // retrieve numbers from input
         const numbers = range.split("-");
-        if(numbers.length !== 2)
+        if(numbers.length !== 2) {
+            sessionStorage.setItem("message", "Range input is incorrect!");
+            location.reload();
             return;
-
+        }
         for(let i=0; i<2; i++) {
-            if(numbers[i].length === 0)
+            if(numbers[i].length === 0) {
+                sessionStorage.setItem("message", "Range input is incorrect!");
+                location.reload();
                 return;
+            }
             numbers[i] = Number(numbers[i]);
         }
 
+        // ajax call
         $.ajax({
             method: "GET",
             url: uri + "items/" + numbers[0] + "/" + numbers[1],
             contentType: "application/json",
             success: (result) => {
-                emptyHeadAndBody();
-                $("thead").append(standardHeader);
-                const tBody = jsonToTableBody(result);
-                $("tbody").append(tBody);
-            }
+                if($.isEmptyObject(result)) {
+                    // insert message to display on reload
+                    sessionStorage.setItem("message", "Request error!");
+                    location.reload();
+                } else
+                    $("tbody").empty().append(jsonToTableBody(result));
+            },
         });
     } else if(id.trim().length !== 0) {
+        // when range is empty, check for id input
         $.ajax({
             method: "GET",
             url: uri + "items/" + id,
             contentType: "application/json",
             success: (result) => {
-                emptyHeadAndBody();
-                $("thead").append(standardHeader);
-                const tBody = jsonToTableBody(result);
-                $("tbody").append(tBody);
+                if($.isEmptyObject(result)) {
+                    // insert message to display on reload
+                    sessionStorage.setItem("message", `Did not find item with id ${id}!`);
+                    location.reload();
+                } else
+                    $("tbody").empty().append(jsonToTableBody(result));
             }
-        });
-    } else {
-        $.ajax({
-            method: "GET",
-            url: uri + "items",
-            contentType: "application/json",
-            success: (result) => {
-                emptyHeadAndBody();
-                $("thead").append(standardHeader);
-                const tBody = jsonToTableBody(result);
-                $("tbody").append(tBody);
-            },
         });
     }
 });
@@ -101,14 +97,17 @@ $("#country_filter").on("submit", function () {
  *  POST new country to REST-API
  */
 $("#country_add").on("submit", function () {
+    // retrieve input
     const name = $("#country_name").val().trim();
     const birth = $("#country_birth").val().trim();
     const cellphone = $("#country_cellphone").val().trim();
 
+    // if everything is empty, do nothing
     if((name + birth + cellphone).length === 0) {
         return;
     }
 
+    // send post request to api
     $.ajax({
         method: "POST",
         url: uri + "items",
@@ -119,6 +118,7 @@ $("#country_add").on("submit", function () {
         }),
         contentType: "application/json; charset=utf-8",
         success: (response) => {
+            // insert message to display on reload
             sessionStorage.setItem("message", response);
             location.reload();
         },
@@ -134,12 +134,11 @@ $("#show_selected_prop").on("click", function () {
     $.ajax({
         method: "GET",
         url: uri + "properties/" + index,
-        headers: { "visibility": 1 },
+        headers: { "visibility": 1 }, // add header for rest api
         contentType: "application/json",
         success: (result) => {
-            let cells = document.querySelectorAll(
-                `tr th:nth-child(${result["index"]}),tr td:nth-child(${result["index"]})`
-            );
+            // retrieve all needed cells and show them
+            let cells = $(`tr th:nth-child(${result["index"]}),tr td:nth-child(${result["index"]})`);
             for(let cell of cells) {
                 cell.style.display = "";
             }
@@ -152,9 +151,10 @@ $("#hide_selected_prop").on("click", function () {
     $.ajax({
         method: "GET",
         url: uri + "properties/" + index,
-        headers: { "visibility": 0 },
+        headers: { "visibility": 0 }, // add header for rest api
         contentType: "application/json",
         success: (result) => {
+            // retrieve all needed cells and hide them
             let cells = document.querySelectorAll(
                 `tr th:nth-child(${result["index"]}),tr td:nth-child(${result["index"]})`
             );
@@ -171,17 +171,20 @@ $("#hide_selected_prop").on("click", function () {
 $("#country_delete").on("submit", function () {
     const deleteId = $("#country_delete_id").val().trim();
 
+    // if no id is given, then do not add it to the url -> removes last element
     let url;
     if(deleteId.length === 0)
         url = uri + "items"
     else
         url = uri + "items/" + deleteId
 
+    // delete call to rest api
     $.ajax({
         method: "DELETE",
         url: url,
         contentType: "application/json",
         success: (response) => {
+            // insert message to display on reload
             sessionStorage.setItem("message", response);
             location.reload();
         },
@@ -217,12 +220,4 @@ function jsonToOptions(data) {
         select += option;
     }
     return select;
-}
-
-/**
- * @return void ~ empties table head and table body via jquery
- */
-function emptyHeadAndBody() {
-    $("thead").empty();
-    $("tbody").empty();
 }
