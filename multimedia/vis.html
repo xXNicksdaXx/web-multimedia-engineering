@@ -124,7 +124,20 @@
 	</header>
 	<main>
 		<h1>World Data Overview ...</h1>
-		<div id="bar-chart"></div>
+		<div class="chart">
+			<select onchange="fillBarChart(this.value)">
+				<option value="3">birth rate per 1000</option>
+				<option value="4">cell phones per 100</option>
+				<option value="5">children per woman</option>
+				<option value="6">electricity consumption per capita</option>
+				<option value="7">gdp per capita</option>
+				<option value="8">gdp per capita growth</option>
+				<option value="9">inflation annual</option>
+				<option value="10">internet user per 100</option>
+				<option value="11">life expectancy</option>
+			</select>
+			<div id="bar-chart"></div>
+		</div>
 		<div id="map"></div>
 
 	</main>
