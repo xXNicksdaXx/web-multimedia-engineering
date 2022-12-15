@@ -6,14 +6,9 @@ Matrikel-Nr.: 4935137
 
 
 Hinweise:
-- beim Reloaden wird Startzustand hergestellt
-- properties waren schwer zu verstehen, was mit /properties/num passieren soll
--> eigene Interpretation:
-    jedes Property erhält ein Objekt:
-    {   id:     number
-        name:   string
-        shown:  boolean
-    }
-    -> speichert Zustände für select Element, und könnte die derzeitige Sichtbarkeit speichern
-        - Speicherung wird nicht genutzt, aber stets aktuell gehalten
-- bei den json-Requests wird bei einem Fehler ein leeres json Objekt zurückgegeben
+
+
+Quellen:
+- Bar-Chart
+-> https://d3-graph-gallery.com/graph/barplot_button_data_csv.html
+-> https://perials.github.io/responsive-bar-chart-with-d3/
