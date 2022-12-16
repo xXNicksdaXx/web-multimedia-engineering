@@ -20,7 +20,7 @@ h1 {
 
 a {
     text-decoration: underline;
-    color: #00bb00;
+    color: #9bc333;
     transition: 0.3s ease-in-out;
 }
 
@@ -30,7 +30,7 @@ a:hover {
 }
 
 .text-box {
-    border-top: 1px solid #00bb00;
+    border-top: 1px solid #9bc333;
     border-left: 1px solid #bbbbbb;
     border-right: 1px solid #bbbbbb;
     border-bottom: 1px solid #bbbbbb;
@@ -43,12 +43,25 @@ a:hover {
     width: 90vw;
 }
 
+.column {
+    float: left;
+    width: 50%;
+    padding: 16px;
+}
+
+/* Clear floats after the columns */
+.vis:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 footer {
     padding: 16px 5%;
 }
 
 .footer {
-    border-top: 1px solid #00bb00;
+    border-top: 1px solid #9bc333;
     padding: 8px 0;
     margin-bottom: 32px;
     display: block;

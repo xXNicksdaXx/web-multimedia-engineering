@@ -7,7 +7,7 @@ div.rest-interface + table {
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
 		border: 1px solid #ccc;
-		border-top-color: #6bc32d;
+		border-top-color: #9bc333;
 		box-shadow: 0 2px 6px #ddd;
 		margin-right: 1em;
 		padding: 1em;
@@ -52,7 +52,7 @@ div.rest-interface + table {
 .green_btn {
 	width: 45%;
 	background-color: #333333;
-	background: linear-gradient(to bottom, #66cc33 0%,#339900 100%);
+	background: linear-gradient(to bottom, #9bc333 0%,#339900 100%);
 	color: #fff;
 	cursor: pointer;
 	font: 99% sans-serif;
