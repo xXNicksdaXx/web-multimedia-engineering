@@ -1,5 +1,4 @@
-let data,
-    map;
+let data, map, markers = {};
 const keys = ["birth rate per 1000", "cell phones per 100", "children per woman", "electricity consumption per capita", "gdp_per_capita", "gdp_per_capita_growth", "inflation annual", "internet user per 100", "life expectancy", "gps_lat", "gps_long", "military expenditure percent of gdp"];
 
 // set the dimensions and margins of the graph
@@ -98,17 +97,19 @@ function fillBarChart(index, chart) {
         let bars = svg1.selectAll("rect");
         // check if bars were already rendered
         if(bars["_groups"][0].length === 0) {
-            // create empty bars
+            // create bars for the first time
             bars.data(data)
                 .enter()
                 .append("rect")
+                .attr("id", item => item["id"])
                 .attr("x", item => x1(item["name"]))
                 .attr("y", _ => y1(0))
                 .attr("height", _ => height - y1(0)) // always equal to 0
                 .attr("width", x1.bandwidth())
                 .attr("fill", "#878787")
-                .on("mouseover", highlightRect)
-                .on("mouseout", normaliseRect);
+                .on("mouseover", (ev, data) => highlightCountry(data["id"]))
+                .on("mouseout", (ev, data) => normaliseCountry(data["id"]))
+                .on("click", (ev, data) => map.flyTo([data["gps_lat"], data["gps_long"]], 4));
 
             // animation to correct height
             svg1.selectAll("rect")
@@ -125,13 +126,8 @@ function fillBarChart(index, chart) {
                 .merge(bars)
                 .transition()
                 .duration(1000)
-                .attr("x", item => x1(item["name"]))
                 .attr("y", item => y1(item[key]))
-                .attr("height", item => height - y1(item[key]))
-                .attr("width", x1.bandwidth())
-                .attr("fill", "#878787")
-                .on("mouseover", highlightRect)
-                .on("mouseout", normaliseRect);
+                .attr("height", item => height - y1(item[key]));
         }
 
     } else if (chart === 2) {
@@ -162,8 +158,10 @@ function fillBarChart(index, chart) {
                 .attr("height", _ => height - y2(0)) // always equal to 0
                 .attr("width", x2.bandwidth())
                 .attr("fill", "#878787")
-                .on("mouseover", highlightRect)
-                .on("mouseout", normaliseRect);
+                .on("mouseover", (ev, data) => highlightCountry(data["id"]))
+                .on("mouseout", (ev, data) => normaliseCountry(data["id"]))
+                .on("click", (ev, data) => map.flyTo([data["gps_lat"], data["gps_long"]], 4));
+
 
             // animation to correct height
             svg2.selectAll("rect")
@@ -180,25 +178,50 @@ function fillBarChart(index, chart) {
                 .merge(bars)
                 .transition()
                 .duration(1000)
-                .attr("x", item => x2(item["name"]))
                 .attr("y", item => y2(item[key]))
-                .attr("height", item => height - y2(item[key]))
-                .attr("width", x2.bandwidth())
-                .attr("fill", "#878787")
-                .on("mouseover", highlightRect)
-                .on("mouseout", normaliseRect);
+                .attr("height", item => height - y2(item[key]));
         }
     }
 }
 
-function highlightRect() {
-    d3.select(this)
-        .style("fill", "#9bc333")
+function highlightCountry(id) {
+    d3.select("#bar-chart1")
+        .select("svg")
+        .selectAll("rect")
+        .filter(item => {
+            return item["id"] === id;
+        })
+        .style("fill", "#9bc333");
+
+    d3.select("#bar-chart2")
+        .select("svg")
+        .selectAll("rect")
+        .filter(item => {
+            return item["id"] === id;
+        })
+        .style("fill", "#9bc333");
+
+    markers[id].setIcon(selectedMarkerIcon);
 }
 
-function normaliseRect() {
-    d3.select(this)
-        .style("fill", "#878787")
+function normaliseCountry(id) {
+    d3.select("#bar-chart1")
+        .select("svg")
+        .selectAll("rect")
+        .filter(item => {
+            return item["id"] === id;
+        })
+        .style("fill", "#878787");
+
+    d3.select("#bar-chart2")
+        .select("svg")
+        .selectAll("rect")
+        .filter(item => {
+            return item["id"] === id;
+        })
+        .style("fill", "#878787");
+
+    markers[id].setIcon(defaultMarkerIcon);
 }
 
 const MarkerIcon = L.Icon.extend({
@@ -208,7 +231,6 @@ const MarkerIcon = L.Icon.extend({
     }
 });
 
-
 const defaultMarkerIcon = new MarkerIcon({
         iconUrl: "../assets/marker.svg",
 }),
@@ -216,26 +238,61 @@ const defaultMarkerIcon = new MarkerIcon({
         iconUrl: "../assets/marker_selected.svg",
 });
 
+function createPopupContent(id, key1, key2) {
+    let country;
+    for(let item of data){
+        if(item["id"] === id) {
+            country = item;
+            break;
+        }
+    }
+    if(key1 === key2) {
+        key1 = keys[key1-3];
+        return `<b>${country["name"]}</b><hr/>${key1}<br/>${country[key1]}`;
+    } else {
+        key1 = keys[key1-3];
+        key2 = keys[key2-3];
+        return `<b>${country["name"]}</b><hr/>${key1}<br/>${country[key1]}<hr/>${key2}<br/>${country[key2]}`;
+    }
+}
+
 
 function initMap() {
     // init map
-    map = L.map("map").setView([45,17], 3);
+    map = L.map("map", {
+        center: [45,17],
+        zoom: 3,
+        minZoom: 2,
+        maxZoom: 4
+    });
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 4,
         attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
     L.control.scale({imperial: true, metric: true}).addTo(map);
 
     for(const country of data) {
-        L.marker(
+        const id = country["id"];
+        const text = createPopupContent(id, 3);
+        markers[id] = L.marker(
             [country["gps_lat"], country["gps_long"]],
-            {icon: defaultMarkerIcon})
-            .bindPopup(country["name"])
+            {
+                icon: defaultMarkerIcon,
+                id: id
+            })
+            .bindPopup(text)
             .on("mouseover", (ev) => {
-                ev.target.setIcon(selectedMarkerIcon);
+                highlightCountry(ev.target.options["id"]);
+                ev.target._popup._content = createPopupContent(
+                    ev.target.options["id"],
+                    $("#select1").val(),
+                    $("#select2").val()
+                );
             })
             .on("mouseout", (ev) => {
-                ev.target.setIcon(defaultMarkerIcon);
+                normaliseCountry(ev.target.options["id"]);
+            })
+            .on("click", (ev) => {
+                map.flyTo([ev.latlng["lat"], ev.latlng["lng"]], 4);
             })
             .addTo(map);
     }
