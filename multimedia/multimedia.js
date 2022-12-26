@@ -1,5 +1,41 @@
+// global variables
 let data, map, markers = {};
 const keys = ["birth rate per 1000", "cell phones per 100", "children per woman", "electricity consumption per capita", "gdp_per_capita", "gdp_per_capita_growth", "inflation annual", "internet user per 100", "life expectancy", "gps_lat", "gps_long", "military expenditure percent of gdp"];
+
+
+/*
+*** INIT SITE
+ */
+
+parseCSV().then(_ => {
+    initMap();
+    fillBarChart(3, 1);
+    fillBarChart(4, 2);
+});
+
+async function parseCSV() {
+    // parse csv via d3
+    const csvData = await d3.csv("../assets/world_data_v3.csv");
+    // format data objects
+    data = csvData.map((item) => {
+        let newItem = {};
+        for(const key in item) {
+            if(!isNaN(item[key]))
+                // round number
+                newItem[key.trim()] = Number(Number(item[key]).toFixed(3));
+            else
+                // trim strings
+                newItem[key.trim()] = item[key].trim();
+        }
+        return newItem;
+    });
+}
+
+
+
+/*
+*** D3 - BAR CHART
+ */
 
 // set the dimensions and margins of the graph
 const margin = {top: 32, right: 48, bottom: 128, left: 48},
@@ -7,7 +43,7 @@ const margin = {top: 32, right: 48, bottom: 128, left: 48},
     height = 360 - margin.top - margin.bottom,
     padding = 0.2;
 
-// append the svg object to the body of the page
+// append the svg objects to the body of the page
 const svg1 = d3.select("#bar-chart1")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -43,25 +79,7 @@ const y1 = d3.scaleLinear()
     yAxis2 = svg2.append("g")
         .attr("class", "y-axis");
 
-
-// functions
-async function parseCSV() {
-    const csvData = await d3.csv("../assets/world_data_v3.csv");
-    // format data objects
-    data = csvData.map((item) => {
-        let newItem = {};
-        for(const key in item) {
-            if(!isNaN(item[key]))
-                // round number
-                newItem[key.trim()] = Number(Number(item[key]).toFixed(3));
-            else
-                // trim strings
-                newItem[key.trim()] = item[key].trim();
-        }
-        return newItem;
-    });
-}
-
+// init or update bar chart
 function fillBarChart(index, chart) {
     // get key
     const key = keys[index-3];
@@ -78,6 +96,7 @@ function fillBarChart(index, chart) {
     min = Math.floor(min * 1.15);
     max = Math.ceil(max * 1.15);
 
+    // choose bar chart
     if(chart === 1) {
         // fill x axis
         x1.domain(data.map(item => { return item["name"]} ));
@@ -104,14 +123,14 @@ function fillBarChart(index, chart) {
                 .attr("id", item => item["id"])
                 .attr("x", item => x1(item["name"]))
                 .attr("y", _ => y1(0))
-                .attr("height", _ => height - y1(0)) // always equal to 0
+                .attr("height", _ => height - y1(0)) // always equal to 0 for animation
                 .attr("width", x1.bandwidth())
                 .attr("fill", "#878787")
                 .on("mouseover", (ev, data) => highlightCountry(data["id"]))
                 .on("mouseout", (ev, data) => normaliseCountry(data["id"]))
                 .on("click", (ev, data) => map.flyTo([data["gps_lat"], data["gps_long"]], 4));
 
-            // animation to correct height
+            // animation to correct value
             svg1.selectAll("rect")
                 .transition()
                 .duration(200)
@@ -155,13 +174,12 @@ function fillBarChart(index, chart) {
                 .append("rect")
                 .attr("x", item => x2(item["name"]))
                 .attr("y", _ => y2(0))
-                .attr("height", _ => height - y2(0)) // always equal to 0
+                .attr("height", _ => height - y2(0)) // always equal to 0 for animation
                 .attr("width", x2.bandwidth())
                 .attr("fill", "#878787")
                 .on("mouseover", (ev, data) => highlightCountry(data["id"]))
                 .on("mouseout", (ev, data) => normaliseCountry(data["id"]))
                 .on("click", (ev, data) => map.flyTo([data["gps_lat"], data["gps_long"]], 4));
-
 
             // animation to correct height
             svg2.selectAll("rect")
@@ -184,46 +202,13 @@ function fillBarChart(index, chart) {
     }
 }
 
-function highlightCountry(id) {
-    d3.select("#bar-chart1")
-        .select("svg")
-        .selectAll("rect")
-        .filter(item => {
-            return item["id"] === id;
-        })
-        .style("fill", "#9bc333");
 
-    d3.select("#bar-chart2")
-        .select("svg")
-        .selectAll("rect")
-        .filter(item => {
-            return item["id"] === id;
-        })
-        .style("fill", "#9bc333");
 
-    markers[id].setIcon(selectedMarkerIcon);
-}
+/*
+*** LEAFLET - MAP
+ */
 
-function normaliseCountry(id) {
-    d3.select("#bar-chart1")
-        .select("svg")
-        .selectAll("rect")
-        .filter(item => {
-            return item["id"] === id;
-        })
-        .style("fill", "#878787");
-
-    d3.select("#bar-chart2")
-        .select("svg")
-        .selectAll("rect")
-        .filter(item => {
-            return item["id"] === id;
-        })
-        .style("fill", "#878787");
-
-    markers[id].setIcon(defaultMarkerIcon);
-}
-
+// class for custom markers
 const MarkerIcon = L.Icon.extend({
     options: {
         iconSize: [32, 32],
@@ -231,31 +216,13 @@ const MarkerIcon = L.Icon.extend({
     }
 });
 
+// custom icon for default marker
 const defaultMarkerIcon = new MarkerIcon({
         iconUrl: "../assets/marker.svg",
-}),
+}), // custom icon for highlighted marker
     selectedMarkerIcon = new MarkerIcon({
         iconUrl: "../assets/marker_selected.svg",
 });
-
-function createPopupContent(id, key1, key2) {
-    let country;
-    for(let item of data){
-        if(item["id"] === id) {
-            country = item;
-            break;
-        }
-    }
-    if(key1 === key2) {
-        key1 = keys[key1-3];
-        return `<b>${country["name"]}</b><hr/>${key1}<br/>${country[key1]}`;
-    } else {
-        key1 = keys[key1-3];
-        key2 = keys[key2-3];
-        return `<b>${country["name"]}</b><hr/>${key1}<br/>${country[key1]}<hr/>${key2}<br/>${country[key2]}`;
-    }
-}
-
 
 function initMap() {
     // init map
@@ -270,43 +237,105 @@ function initMap() {
     }).addTo(map);
     L.control.scale({imperial: true, metric: true}).addTo(map);
 
+    // add marker for each country
     for(const country of data) {
         const id = country["id"];
-        const text = createPopupContent(id, 3);
+        const text = createPopupContent(id, 3, 4);
         markers[id] = L.marker(
-            [country["gps_lat"], country["gps_long"]],
+            [country["gps_lat"], country["gps_long"]], // marker coordinate via csv input
             {
-                icon: defaultMarkerIcon,
-                id: id
+                icon: defaultMarkerIcon, // set custom icon
+                id: id // set id for interaction with bar chart
             })
             .bindPopup(text)
             .on("mouseover", (ev) => {
-                highlightCountry(ev.target.options["id"]);
+                highlightCountry(ev.target.options["id"]); // change icon of map and color of bar
                 ev.target._popup._content = createPopupContent(
                     ev.target.options["id"],
                     $("#select1").val(),
                     $("#select2").val()
-                );
+                ); // update popup content
             })
             .on("mouseout", (ev) => {
-                normaliseCountry(ev.target.options["id"]);
+                normaliseCountry(ev.target.options["id"]); // return icon of map and color of bar to default
             })
             .on("click", (ev) => {
-                map.flyTo([ev.latlng["lat"], ev.latlng["lng"]], 4);
+                map.flyTo([ev.latlng["lat"], ev.latlng["lng"]], 4); // change focus of map
             })
             .addTo(map);
     }
 }
 
+function createPopupContent(id, key1, key2) {
+    let country;
+    // get country
+    for(let item of data){
+        if(item["id"] === id) {
+            country = item;
+            break;
+        }
+    }
+    if(key1 === key2) {
+        // if both <select> have same value, just add one fact
+        key1 = keys[key1-3];
+        return `<b>${country["name"]}</b><hr/>${key1}<br/>${country[key1]}`;
+    } else {
+        // get key from both <select>
+        key1 = keys[key1-3];
+        key2 = keys[key2-3];
+        // fill popup with both facts
+        return `<b>${country["name"]}</b><hr/>${key1}<br/>${country[key1]}<hr/>${key2}<br/>${country[key2]}`;
+    }
+}
 
-// init
-parseCSV().then(_ => {
-    initMap();
-    fillBarChart(3, 1);
-    fillBarChart(4, 2);
-});
 
 
+/*
+*** SYNC CHARTS <-> MAP
+ */
 
+function highlightCountry(id) {
+    // marks bar in chart 1
+    d3.select("#bar-chart1")
+        .select("svg")
+        .selectAll("rect")
+        .filter(item => {
+            return item["id"] === id; // get the correct bar
+        })
+        .style("fill", "#9bc333");
 
+    // marks bar in chart 2
+    d3.select("#bar-chart2")
+        .select("svg")
+        .selectAll("rect")
+        .filter(item => {
+            return item["id"] === id;
+        })
+        .style("fill", "#9bc333");
 
+    // changes icon of relevant marker
+    markers[id].setIcon(selectedMarkerIcon);
+}
+
+function normaliseCountry(id) {
+    // marked column in chart 1 is grey
+    d3.select("#bar-chart1")
+        .select("svg")
+        .selectAll("rect")
+        .filter(item => {
+            return item["id"] === id; // get the correct bar
+        })
+        .style("fill", "#878787");
+
+    // marked column in chart 2 is grey
+    d3.select("#bar-chart2")
+        .select("svg")
+        .selectAll("rect")
+        .filter(item => {
+            return item["id"] === id;
+        })
+        .style("fill", "#878787");
+
+    // changes icon of relevant marker to default
+    markers[id].setIcon(defaultMarkerIcon);
+}

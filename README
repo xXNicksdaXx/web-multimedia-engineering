@@ -6,9 +6,25 @@ Matrikel-Nr.: 4935137
 
 
 Hinweise:
+- CSV Datei verändert, da bei Chile eine der GPS Koordinaten falsch war (Minus hat gefehlt)
+- Animation zu Balkendiagrammen hinzugefügt
+- <select> beinhaltet alle Parameter außer id und Name
+-> keine sinnvollen Daten für Diagramm
 
+- Karte hat festgelegte Zoom-Level, um grobe Ansicht beizubehalten
+- Ländertitel konnten nicht von Karte entfernt werden
+    (zumindest nicht ohne großen Umweg, ist sowieso nur für die Ästhetik)
+- custom Icons für ein markiertes Land wurden in "/assets" eingefügt
+
+- css Layout schiebt Karte bei gewählter Breite unter die Balkendiagramme
+-> Überlappen verhindert
+- Breite des Balkendiagramms nicht responsive (zu viel Aufwand)
+- 3D nicht bearbeitet, leere Seite mit Hinweis hinzugefügt
 
 Quellen:
 - Bar-Chart
 -> https://d3-graph-gallery.com/graph/barplot_button_data_csv.html
 -> https://perials.github.io/responsive-bar-chart-with-d3/
+- Karte
+-> https://leafletjs.com/examples/quick-start/
+-> https://leafletjs.com/reference.html

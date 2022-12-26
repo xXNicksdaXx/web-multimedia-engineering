@@ -49,11 +49,17 @@ a:hover {
     padding: 16px;
 }
 
-/* Clear floats after the columns */
 .vis:after {
     content: "";
     display: table;
     clear: both;
+}
+
+/* map moves below bar charts */
+@media screen and (max-width: 1260px) {
+    .column {
+        width: 100%;
+    }
 }
 
 footer {
